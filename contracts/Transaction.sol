@@ -6,8 +6,8 @@ pragma solidity >=0.7.0 <0.9.0;
 
 contract Transaction {
     
-    function sendRemittance(address payable _remittanceRecipient, uint256 _remittanceAmount) public payable {        
-        _remittanceRecipient.transfer(_remittanceAmount);
+    function sendTransaction(address payable _recipient, uint256 _amount) public payable {        
+        _recipient.transfer(_amount);
     }
 
 }
