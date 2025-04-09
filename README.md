@@ -32,10 +32,12 @@ ng g s dapp/services/wallet
 ```
 ng g c dapp/components/wallet
 ```
-- **Instalar Web o ethers según la elección**
+- **Instalar Web3 o ethers según la elección**
+```
+npm install web3
+```
 ```
 npm install ethers
-npm install web3
 ```
 
 
