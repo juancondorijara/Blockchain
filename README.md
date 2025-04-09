@@ -1,4 +1,4 @@
-# Estructurar una dApp en Codespaces y Gitpod
+# Estructurar una dApp con Angular 17 en Codespaces
 
 ## En la terminal de Codespaces 👨‍💻🔵👩‍💻
 - **Ejecutar comandos en orden**
