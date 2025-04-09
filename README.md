@@ -1,6 +1,49 @@
+# Estructurar una dApp con Angular 17 en Codespaces
+
+## En la terminal de Codespaces 👨‍💻🔵👩‍💻
+- **Ejecutar comandos en orden**
+```
+nvm install 20.9.0
+```
+```
+npm install -g @angular/cli@17.3.0
+```
+```
+ng new dapp --directory=. --style=css
+```
+```
+mkdir src/app/dapp
+```
+```
+mkdir src/app/dapp/config
+```
+```
+mkdir src/app/dapp/{abi,interfaces,services,components}
+```
+```
+touch src/app/dapp/abi/Transaction.json
+```
+```
+ng g i dapp/interfaces/wallet.interface
+```
+```
+ng g s dapp/services/wallet
+```
+```
+ng g c dapp/components/wallet
+```
+- **Instalar Web3 o ethers según la elección**
+```
+npm install web3
+```
+```
+npm install ethers
+```
+
+
 # Dapp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.15.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.0.
 
 ## Development server
 
