@@ -1,4 +1,8 @@
 export interface WalletInterface {
+
     address: string;
-    balance: number;
+    balance: string;
+    chainId: string;
+    networkName: string;
+    
 }

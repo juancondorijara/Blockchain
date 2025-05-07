@@ -1,58 +1,55 @@
 import { Component, OnInit } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AsyncPipe } from '@angular/common';
 import { WalletService } from '../../services/wallet.service';
 import { WalletInterface } from '../../interfaces/wallet.interface';
-import { CommonModule } from '@angular/common';  // Importar CommonModule si usas ngIf, ngFor, etc
-import { FormsModule } from '@angular/forms';    // Importar FormsModule si usas ngModel
 
 @Component({
   selector: 'app-wallet',
   standalone: true,
-  imports: [CommonModule, FormsModule],  // Añadir los módulos que necesitas
-  providers: [WalletService],  // Aquí inyectamos el WalletService explícitamente
+  imports: [CommonModule, FormsModule, AsyncPipe],
+  //providers: [WalletService],
   templateUrl: './wallet.component.html',
   styleUrl: './wallet.component.css'
 })
-export class WalletComponent implements OnInit {
+export class WalletComponent {
 
-  constructor(
-    private walletService: WalletService
-  ) {}
+  wallet$ = this.walletService.wallet$;
 
-  ngOnInit(): void {
-    this.walletService.wallet$.subscribe(wallet => {
-      this.walletInterface = wallet;
-    });
+  selectedNetwork = '0x1';
+  networks = [
+    { name: 'Ethereum Mainnet', chainId: '0x1' },
+    { name: 'Sepolia', chainId: '0xaa36a7' },
+    { name: 'Holesky', chainId: '0x4268' }
+  ];
+
+  constructor(private walletService: WalletService) {}
+
+  connect() {
+    this.walletService.connectWallet();
   }
 
-  walletInterface: WalletInterface = { address: '', balance: 0 };
-
-  loginWithMetaMask(): void {
-    this.walletService.loginWithMetaMask();
+  changeNetwork() {
+    this.walletService.switchNetwork(this.selectedNetwork);
   }
 
-  addressTo: string = '';
-  balanceTo: number = 0;
 
-  sendTransactionWeb3(): void{
-    this.walletService.sendTransactionWeb3(this.walletInterface.address, this.addressTo, this.balanceTo);
-    console.log(this.walletInterface.address);
-    console.log(this.addressTo);
-    console.log(this.balanceTo);
-    //this.cleanWallet();
-  }
 
-  cleanWallet(): void{
-    this.addressTo='';
-    this.balanceTo=0;
-  }
+  recipient = '';
+  amount = '';
+  txHash = '';
+  error = '';
 
-  changeNetwork(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    const chainId = selectElement.value;
-  
-    if (chainId) {
-      this.walletService.changeNetwork(chainId);
+  async send() {
+    this.txHash = '';
+    this.error = '';
+    try {
+      const tx = await this.walletService.sendEth(this.recipient, this.amount);
+      this.txHash = tx.hash;
+    } catch (err: any) {
+      this.error = err?.message || 'Error al enviar ETH';
     }
   }
 

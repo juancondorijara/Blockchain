@@ -1,60 +1,45 @@
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-  <div class="card p-4 shadow w-100" style="max-width: 500px;">
-    <h2 class="card-title text-center mb-4">Wallet Information</h2>
+<div class="wallet-container">
+  <button class="btn-primary" (click)="connect()">Iniciar sesión con MetaMask</button>
 
-    <div *ngIf="walletInterface.address && walletInterface.balance" class="mb-3">
-      <p><strong>Address:</strong> {{ walletInterface.address }}</p>
-      <p><strong>Balance:</strong> {{ walletInterface.balance }} ETH</p>
-    </div>
+  <div *ngIf="wallet$ | async as wallet" class="wallet-info">
 
-    <div *ngIf="!walletInterface.address" class="alert alert-warning text-center">
-      Please log in with MetaMask to see your wallet details.
-    </div>
+    <label for="network">Cambiar red:</label>
+    <select id="network" [(ngModel)]="selectedNetwork" (change)="changeNetwork()">
+      <option *ngFor="let net of networks" [value]="net.chainId">{{ net.name }}</option>
+    </select>
 
-    <div class="d-grid gap-2 mb-3">
-      <button (click)="loginWithMetaMask()" class="btn btn-primary">
-        Login with MetaMask
-      </button>
-    </div>
+    <label>Dirección:</label>
+    <input [value]="wallet.address" disabled />
 
-    <div class="mb-3">
-      <label for="networkSelect" class="form-label">Selecciona una red</label>
-      <select id="networkSelect" class="form-select" (change)="changeNetwork($event)">
-        <option value="">Selecciona una red</option>
-        <option value="0x1">Ethereum Mainnet</option>
-        <option value="0x5">Goerli Testnet</option>
-        <option value="0xaa36a7">Sepolia Testnet</option>
-        <option value="0x89">Polygon Mainnet</option>
-        <option value="0x13881">Mumbai Testnet</option>
-      </select>
-    </div>
+    <label>Saldo:</label>
+    <input [value]="wallet.balance + ' ETH'" disabled />
 
-    <div class="mb-3">
-      <label for="addressTo" class="form-label">Dirección destino</label>
-      <textarea
-        id="addressTo"
-        class="form-control"
-        placeholder="0x0000000000000000000000000000000000000000"
-        [(ngModel)]="addressTo"
-        rows="2"
-      ></textarea>
-    </div>
+    <label>Red actual:</label>
+    <input [value]="wallet.networkName" disabled />
 
-    <div class="mb-3">
-      <label for="balanceTo" class="form-label">Cantidad a enviar (ETH)</label>
-      <input
-        type="number"
-        id="balanceTo"
-        class="form-control"
-        placeholder="0"
-        [(ngModel)]="balanceTo"
-      />
-    </div>
-
-    <div class="d-grid">
-      <button type="button" class="btn btn-dark" (click)="sendTransactionWeb3()">
-        REALIZAR TRANSACCIÓN
-      </button>
-    </div>
   </div>
 </div>
+
+<hr />
+
+<div class="wallet-container">
+  <h2>Enviar ETH (sin contrato)</h2>
+
+  <label>Dirección de destino:</label>
+  <input [(ngModel)]="recipient" placeholder="0x..." />
+
+  <label>Monto (ETH):</label>
+  <input [(ngModel)]="amount" placeholder="0.01" />
+
+  <hr />
+
+  <button class="btn-primary" (click)="send()">Enviar</button>
+
+  <div *ngIf="txHash" class="success">
+    Transacción enviada:<br />
+    <a target="_blank" [href]="'https://holesky.etherscan.io/tx/' + txHash">{{ txHash }}</a>
+  </div>
+
+  <div *ngIf="error" class="error">{{ error }}</div>
+</div>
+
